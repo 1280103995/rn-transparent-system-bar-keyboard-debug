@@ -76,11 +76,19 @@ You can setup your initial status bar style in **Xcode > General > Deployment In
 
 ```js
 import * as React from "react";
-import { SystemBars } from "./ts";
+import { NavigationBar, StatusBar, SystemBars } from "./ts";
 
 export default function App() {
   useEffect(() => {
-    SystemBars.init('dark-content');
+    SystemBars.init('dark-content'); //This line is required
+    
+    const doSomeThing = () => {
+       ......
+       StatusBar.setBarStyle('light-content');
+       NavigationBar.setBarStyle('light-content');
+       ......
+    };
+    
   }, []);
 
   ......
