@@ -8,13 +8,13 @@ import { NativeModule } from "./module";
 export class SystemBars extends React.Component<SystemBarsProps> {
 
   static init(style: SystemBarStyle): void {
-    if (Platform.OS === 'ios') {
-      StatusBar.setBarStyle(style);
-    } else {
+    if (Platform.OS === 'android') {
       NativeModule?.init(style);
       DeviceEventEmitter.addListener('rnBarsNavHeight', data => {
         NavigationBar.currentHeight = data.navigationBarHeight;
       })
+    } else {
+      StatusBar.setBarStyle(style);
     }
   }
 
