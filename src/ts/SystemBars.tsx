@@ -11,6 +11,7 @@ export class SystemBars extends React.Component<SystemBarsProps> {
     if (Platform.OS === 'android') {
       NativeModule?.init(style);
       DeviceEventEmitter.addListener('rnBarsNavHeight', data => {
+        //FIXME sometimes wrong
         NavigationBar.currentHeight = data.navigationBarHeight;
       })
     } else {
