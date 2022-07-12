@@ -157,6 +157,10 @@ export default class KeyboardAwareScrollView extends PureComponent {
     } else if (contentContainerStyle?.paddingBottom) {
       contentInsetBottom = contentContainerStyle?.paddingBottom + keyboardSpace;
     }
+    if (contentContainerStyle?.flex) {
+      delete contentContainerStyle?.flex;
+      contentContainerStyle.flexGrow = 1;
+    }
     return (
       <ScrollView
         contentContainerStyle={{
