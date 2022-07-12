@@ -127,12 +127,6 @@ StatusBar.currentHeight;
 NavigationBar.setBarStyle(style: SystemBarStyle);
 ```
 
-#### NavigationBar.currentHeight
-
-```js
-NavigationBar.currentHeight;
-```
-
 ---
 
 ### `<SystemBars />`
