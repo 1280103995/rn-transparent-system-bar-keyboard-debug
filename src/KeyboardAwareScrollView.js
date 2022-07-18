@@ -1,10 +1,8 @@
 import React, {PureComponent} from 'react';
 import {
-  Dimensions,
   Keyboard,
   Platform,
   ScrollView,
-  StatusBar,
   TextInput,
 } from 'react-native';
 
@@ -41,13 +39,15 @@ export default class KeyboardAwareScrollView extends PureComponent {
       const inputScreenY = await this._measureElement();
       this.keyboardScreenY = frames.endCoordinates.screenY;
       const elementScreenY = inputScreenY + this._getExtraOffsetY();
-
-      this.setState(
-        {
-          keyboardSpace:
-            frames.endCoordinates.height - this.scrollViewBottomHeight,
-        },
-        () => {
+      let diff = frames.endCoordinates.screenY - this.scrollViewBottomScreenY;
+      if (diff >= 0) {
+        diff = 0;
+      } else {
+        diff = Math.abs(diff);
+      }
+      this.setState({
+          keyboardSpace: diff
+        }, () => {
           if (this.keyboardScreenY >= elementScreenY) {
             return;
           }
@@ -59,7 +59,7 @@ export default class KeyboardAwareScrollView extends PureComponent {
               animated: false,
             });
           }, 0);
-        },
+        }
       );
     });
     this.hideListener = Keyboard.addListener(hideEventType, frames => {
@@ -80,9 +80,7 @@ export default class KeyboardAwareScrollView extends PureComponent {
     }
     setTimeout(() => {
       this.scrollRef?.measure((x, y, width, height, pageX, pageY) => {
-        const deviceHeight = Dimensions.get('screen').height;
-        this.scrollViewBottomHeight =
-          deviceHeight - (height + pageY) - this._getSystemBarHeight();
+        this.scrollViewBottomScreenY = height + pageY;
       });
     }, 0);
   }
@@ -97,15 +95,6 @@ export default class KeyboardAwareScrollView extends PureComponent {
     const {extraHeight} = this.props;
     return this.extraHeight > -1 ? this.extraHeight : extraHeight;
   }
-
-  _getSystemBarHeight = () => {
-    const statusBarHeight = StatusBar.currentHeight;
-    const navBarHeight =
-      Dimensions.get('screen').height -
-      Dimensions.get('window').height -
-      statusBarHeight;
-    return statusBarHeight + navBarHeight;
-  };
 
   _measureElement = () => {
     return new Promise(resolve => {
@@ -208,3 +197,4 @@ KeyboardAwareScrollView.defaultProps = {
 //       }}/>
 //   </KeyboardAwareScrollView>
 // </Fragment>
+
